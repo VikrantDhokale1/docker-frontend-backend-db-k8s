@@ -1,41 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app-deployment
+  name: front-app-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: my-app
+      app: front-app
   template:
     metadata:
       labels:
-        app: my-app
+        app: front-app
     spec:
       containers:
-      - name: my-app-container
-        image: <ECR Repo URL>
+      - name: front-app-container
+        image: gcr.io/conductive-bank-401005/frontend:flatest
         ports:
-        - containerPort: 80
+        - containerPort: 3000
         resources:
           requests:
             memory: "64Mi"
             cpu: "250m"
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-app-service
+  name: front-app-service
 spec:
   selector:
-    app: my-app
+    app: front-app
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 80
+    targetPort: 3000
   type: LoadBalancer
